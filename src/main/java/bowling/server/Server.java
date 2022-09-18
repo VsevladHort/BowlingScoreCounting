@@ -7,6 +7,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -14,6 +16,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.FileHandler;
@@ -28,9 +31,14 @@ public class Server {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
 
     public static void main(String[] args) throws UnknownHostException {
-        LOGGER.log(Level.INFO, "Started server");
-        Server server = new Server(InetAddress.getByName("localhost"), 10, 8000);
-        server.startServer();
+        LOGGER.log(Level.INFO, "Started application");
+        try (Scanner scanner = new Scanner(new File("server_info.txt"))) {
+            Server server =
+                    new Server(InetAddress.getByName(scanner.nextLine()), 10, Integer.parseInt(scanner.nextLine()));
+            server.startServer();
+        } catch (FileNotFoundException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
     }
 
     static {

@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.example'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 repositories {
     mavenCentral()
@@ -16,4 +16,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jar{
+    from sourceSets.main.allSource
+    manifest {
+        attributes 'Main-Class': 'bowling.server.Server'
+    }
+    baseName = 'bowling'
 }
